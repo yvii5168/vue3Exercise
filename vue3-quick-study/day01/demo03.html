@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 双向数据绑定v-model -->
+    <h3>文本框: {{data.text}}</h3>
+    <h3>单选框: {{data.radio}}</h3>
+    <h3>复选框: {{data.checkbox}}</h3>
+    <h3>记住密码: {{data.remeber}}</h3>
+    <h3>下拉框: {{data.select}}</h3>
+    单向数据绑定<input type="text" :value="data.text">
+    <hr />
+    双向数据绑定<input type="text" v-model="data.text">
+    <hr />
+    <!-- 单选框 -->
+    <input type="radio" v-model="data.radio" value="1">写作
+    <input type="radio" v-model="data.radio" value="2">唱歌
+    <!-- 复选框 -->
+    <hr />
+    <input type="checkbox" v-model="data.checkbox" value="a">写作
+    <input type="checkbox" v-model="data.checkbox" value="b">唱歌
+    <input type="checkbox" v-model="data.checkbox" value="c">书法
+    <input type="checkbox" v-model="data.checkbox" value="d">运动
+    <!-- 记住密码 -->
+    <hr />
+    <input type="checkbox" v-model="data.remeber">记住密码
+    <!-- 下拉框 -->
+    <hr />
+    <select v-model="data.select">
+      <option value="">请选择</option>
+      <option value="A">写作</option>
+      <option value="B">唱歌</option>
+      <option value="C">书法</option>
+      <option value="D">运动</option>
+    </select>
+    <!-- v-module修饰符 -->
+    <hr>
+    <h3>url：{{web.url}}</h3>
+    <h3>user：{{web.user}}</h3>
+    实时渲染<input type="text" v-model="web.url">
+    <br>
+    在失去焦点或按下回车键之后渲染<input type="text" v-model.lazy="web.url">
+    <br>
+    输入框的值转换为数字类型<input type="text" v-model.number="web.user">
+    <br>
+    去除首尾空格<input type="text" v-model.trim="web.url">
+    <!-- v-text/v-html渲染数据 -->
+    <hr>
+    <h3>{{web.title}}</h3>
+    <h3 v-text="web.title"></h3>
+    <h3 v-html="web.urlHtml"></h3>
+  </div>
+  <script type="module">
+    import { createApp, reactive } from './vue.esm-browser.js';
+    createApp({
+      setup() {
+        const data = reactive({
+          text: 'vue3学习',
+          radio: '',
+          checkbox: [],
+          remeber: false,
+          select: ''
+        });
+
+        const web = reactive({
+          title: 'kxc玩玩vue3',
+          url: 'kxc.org.com',
+          urlHtml: '<i style="color: red; fontWeight: 900">www.kxc.org.com</i>',
+          user: 10
+        });
+        return {
+          data,
+          web
+        }
+      }
+    }).mount("#app");
+  </script>
+</body>
+
+</html>

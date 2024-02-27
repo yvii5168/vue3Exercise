@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <input type="text" v-model="data.content">
+
+    <button @click="add">添加</button>
+    <!-- data.list的展示列表 -->
+    <ul>
+      <li v-for="(value, index) in data.list">
+        {{value}} <button @click="del(index)">删除</button>
+      </li>
+    </ul>
+    列表条数：{{ data.list.length }} <button @click="clear">清空</button>
+
+  </div>
+  <script type="module">
+    import { createApp, reactive } from './js/vue.esm-browser.js';
+
+    createApp({
+      setup(){
+        const data = reactive({
+          content: 'www.kxc.org.com',
+          list: ['kxc玩玩vue3', 'kxc.org.com']
+        });
+
+        const add = ()=>{
+          data.list.push(data.content);
+          console.log('添加后的list数据：', data.list);
+        }
+
+        const del = (index)=>{
+          data.list.splice(index, 1);
+        }
+
+        const clear = ()=>{
+          data.list = [];
+        }
+
+        return {
+          data,
+          add,
+          del,
+          clear
+        }
+      }
+    }).mount("#app");
+  </script>
+</body>
+</html>

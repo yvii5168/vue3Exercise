@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .textColor {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 动态属性绑定v-bind:(:) -->
+    <!-- :value -->
+    <h3>value="kxc.org.com"</h3>
+    <input type="text" value="kxc.org.com">
+
+    <h3>v-bind:value="web.url"</h3>
+    <input type="text" v-bind:value="web.url">
+
+    <h3>v-bind:的简写:，即：:value="web.url"</h3>
+    <input type="text" :value="web.url">
+    <!-- :src -->
+    <h3>src="meinv.jpg"</h3>
+    <img src="meinv.jpg" style="width: 400px;height: 300px;">
+
+    <h3>:src="web.img"</h3>
+    <img :src="web.img" style="width: 500px;height: 300px;">
+    <!-- :class -->
+    <h3>class="textColor"</h3>
+    <b class="textColor">kxc玩玩vue3</b>
+
+    <h3>:class="{textColor: web.fontStatus}"</h3>
+    <b :class="{textColor: web.fontStatus}">kxc玩玩vue3</b>
+    <!-- 遍历数组或对象 v-for -->
+    <hr>
+    <ul>
+      <li v-for="value in data.number">
+        {{value}}
+      </li>
+    </ul>
+    <!-- 对象：ul>ol -->
+    <ul>
+      <ol v-for="(value, key) in data.user">
+        key => {{key}} : value => {{value}}
+      </ol>
+    </ul>
+    <!-- 对象：(value, key, index)：ul>li -->
+    <ul>
+      <li v-for="(value, key, index) in data.user">
+        index => {{index}} : key => {{key}} : value => {{value}}
+      </li>
+    </ul>
+    <!-- 对象：(value, key, index)：ul>ol -->
+    <ul>
+      <template v-for="(value, key, index) in data.user">
+        <ol v-if="index == 1">
+          index => {{index}} : key => {{key}} : value => {{value}}
+        </ol>
+      </template>
+    </ul>
+    <!-- 数组：(value, index)：ul>li -->
+    <ul>
+      <li v-for="(value, index) in data.teacher" :title="value.name" :key="value.id">
+        index => {{index}} : value.id => {{value.id}} : value.web => {{value.web}}
+      </li>
+    </ul>
+  </div>
+
+  <script type="module">
+    import { createApp, reactive } from './vue.esm-browser.js';
+    createApp({
+      setup() {
+        const web = reactive({
+          url: 'www.kxc.org.com',
+          img: 'meinv.jpg',
+          fontStatus: false
+        });
+
+        const data = reactive({
+          number: ['一', '二', '三'], // 数组
+          user: { // 对象
+            name: 'Lucy',
+            gender: 'female'
+          },
+          teacher: [ // 包含两个对象的数组
+            { id: 100, name: 'kxc', web: 'kxc.org.com' },
+            { id: 101, name: 'cxk', web: 'cxk.org.com' },
+          ]
+        })
+
+        return {
+          web,
+          data
+        }
+      }
+    }).mount("#app");
+    // 如果没有.mount("#app")，vue的语法不生效，但是html的可以生效
+  </script>
+
+</body>
+
+</html>
