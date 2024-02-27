@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <!-- 计算属性： computed -->
+    <h3>add：{{ add() }}</h3>
+    <h3>add：{{ add() }}</h3>
+
+    <h3>sub：{{ sub }}</h3>
+    <h3>sub：{{ sub }}</h3>
+    x：<input type="text" v-model.number="data.x"> <br>
+    y：<input type="text" v-model.number="data.y">
+  </div>
+  <script type="module">
+    import {createApp, reactive, computed} from './vue.esm-browser.js';
+    createApp({
+
+      setup() {
+        const data = reactive({
+          x: 10,
+          y: 20
+        });
+
+        // 方法-无缓存
+        const add = () => {
+          console.log('add'); // 打印2次
+          return data.x + data.y
+        }
+        // 计算属性-有缓存
+        const sub = computed(
+          ()=>{
+            console.log('sub');
+            return data.x - data.y;
+          }
+        );
+
+        return {
+          data,
+          add,
+          sub
+        }
+      }
+    }).mount("#app");
+  </script>
+</body>
+</html>

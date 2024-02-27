@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./js/axios.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <select v-model="data.type">
+      <option value="0">请选择</option>
+      <option value="1">ID</option>
+      <option value="2">标题</option>
+    </select>
+    <input type="text" v-model="data.content">
+    <button @click="search">搜索</button>
+    <hr>
+    <ul>
+      <li v-for="(value, index) in data.list" :key="index">
+        {{value}}
+      </li>
+    </ul>
+  </div>
+  <script type="module">
+    import { createApp, reactive } from './js/vue.esm-browser.js';
+
+    createApp({
+      setup() {
+        const data = reactive({
+          type: '0', // 搜索类型
+          content: '', // 搜索内容
+          list: []
+        });
+        // 搜索事件
+        const search = () =>{
+          console.log('搜索类型：',data.type,"搜索内容：",data.content);
+          if (data.type == '1') {
+            let id = data.content;
+            // get请求
+            axios.get(`http://127.0.0.1:8080/article/get/${id}`).then(response => {
+              console.log('get.data：', response.data);
+              if (response.data.status == 0) {
+                // 此处id是唯一的，所以数据只会有一条，可以直接赋值
+                data.list = response.data.data;
+              }
+            });
+          } else if(data.type == '2') {
+            let param = {
+              title: data.content
+            }
+            // post请求
+            axios.post("http://127.0.0.1:8080/article/postJson/search", param).then(response=>{
+              console.log('post.data：', response.data);
+              data.list = [];
+              if (response.data.status == 0 && response.data.data.length > 0) {
+                // 此处title不唯一，可能出现多条，需要进行遍历插入
+                response.data.data.forEach(item => {
+                  data.list.push(item);
+                });
+
+              }
+            }).catch(error=>{
+              console.log('post.error：', error);
+            });
+          }
+        }
+
+        return {
+          data,
+          search
+        }
+      }
+    }).mount("#app");
+  </script>
+</body>
+</html>

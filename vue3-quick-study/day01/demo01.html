@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <script src="vue.global.js"></script> -->
+</head>
+
+<body>
+  <div id="app">
+    <!-- 绑定一个事件v-on:（@） -->
+    {{msg}}
+
+    <h2>{{web.title}}</h2>
+    <h2>{{web.url}}</h2>
+    <h2>{{number}}</h2>
+    <button v-on:click="edit">修改url</button> <br />
+    <button @click="edit">修改url-简写@</button>
+    <hr />
+    <!-- 事件修饰符 -->
+    <h2>{{web.user}}</h2>
+    回车<input type="text" @keyup.enter="add(40, 60)" /><br />
+    空格<input type="text" @keyup.space="add(40, 60)" /><br />
+    tab<input type="text" @keydown.tab="add(40, 60)" /><br />
+    w<input type="text" @keyup.w="add(40, 60)" /><br />
+    <!-- 组合快捷键 -->
+    Ctrl + Enter<input type="text" @keyup.ctrl.enter="add(40, 60)" /><br />
+    Ctrl + A<input type="text" @keyup.ctrl.a="add(40, 60)" /><br />
+    <!-- 显示/隐藏 v-show/v-if-->
+    <hr />
+    <h2>{{ web.show }}</h2>
+    <p v-show="web.show">kxc玩玩vue3 kxc.org.com</p>
+    <p v-if="web.show">kxc.org.com</p>
+    <button @click="toggle">切换显示状态</button>
+    <!-- 条件渲染 v-if -->
+    <p v-if="web.user < 100">新网站</p>
+    <p v-else-if="web.user >= 100 && web.user < 300">优化网站</p>
+    <p v-else>资深网站</p>
+  </div>
+
+  <script type="module">
+    // const {createApp,reactive} = Vue;
+    // 模块化开发引入依赖：createApp,reactive,ref
+    import { createApp, reactive, ref } from './vue.esm-browser.js';
+
+    createApp({
+      // setup 选项，用于设置响应式数据和方法等
+      setup() {
+        // const number = ref(10);
+        // number.value = 30;
+        const number = ref([1, 2, 3]);
+
+        const web = reactive({
+          title: 'vue3玩玩',
+          url: 'vue3.org.com',
+          user: 0,
+          show: true
+        });
+
+        const edit = () => {
+          web.url = 'kxc.org.com'
+        }
+        const add = (a, b) => {
+          web.user += a + b;
+        }
+
+        const toggle = () => {
+          web.show = !web.show;
+        }
+
+        return {
+          msg: 'Success',
+          web,
+          number,
+          edit,
+          add,
+          toggle
+        }
+      }
+    }).mount("#app");
+  </script>
+</body>
+
+</html>

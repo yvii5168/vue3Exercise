@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <!-- 监听属性：watch -->
+    <hr>
+    爱好
+    <select v-model="hobby">
+      <option value="">请选择</option>
+      <option value="1">写作</option>
+      <option value="2">画画</option>
+      <option value="3">运动</option>
+    </select>
+    
+    <hr>
+    年
+    <select v-model="date.year">
+      <option value="">请选择</option>
+      <option value="2022">2022</option>
+      <option value="2023">2023</option>
+      <option value="2024">2024</option>
+    </select>
+    月
+    <select v-model="date.month">
+      <option value="">请选择</option>
+      <option value="03">03</option>
+      <option value="04">04</option>
+      <option value="05">05</option>
+    </select>
+  </div>
+  <script type="module">
+    import {createApp, reactive, ref, watch, watchEffect} from './vue.esm-browser.js';
+    createApp({
+
+      setup() {
+        const hobby = ref(""); // 爱好
+        const date = reactive({ //  日期
+          year: '2022',
+          month: '10'
+        });
+        /**
+         * watch：手动监听
+         * */ 
+        // 监听 hobby
+        watch(hobby, (newValue, oldValue)=>{
+          console.log("newValue", newValue, "oldValue", oldValue);
+        });
+        // 监听 date
+        watch(date, (newValue, oldValue)=>{
+          // JS中对象和数组是使用的引用传递（即内存空间位置）
+          console.log("date=>oldValue", oldValue, "date=>newValue", newValue);
+          if (newValue.year == "2024") {
+            console.log("typesof date.year：", typeof newValue.year, "value:", newValue.year);
+          }
+          if (newValue.month == "4") {
+            console.log("typesof date.month：", typeof newValue.month, "value:", newValue.month);
+          }
+        });
+
+        // 监听date中的某个属性
+        watch(()=>date.year, (newValue, oldValue)=>{
+          console.log("year=>oldValue", oldValue, "year=>newValue", newValue);
+          if (newValue.year == "2024") {
+            console.log("监听date中的year属性：", newValue.year);
+          }
+        });
+
+        /**
+         * watchEffect：自动监听
+         * 如果想要获取旧值，需要使用watch的手动监听，自动监听只能获取最新值
+         * */ 
+        watchEffect(()=>{
+          console.log("----------自动监听开始");
+          if (hobby.value == '2') {
+            console.log('画画');
+          }
+          if (date.year == '2024') {
+            console.log('2024');
+          }
+          if (date.month == '04') {
+            console.log('04');
+          }
+
+          console.log('-----------自动监听结束');
+        });
+
+        return {
+          hobby,
+          date
+        }
+      }
+    }).mount("#app");
+  </script>
+</body>
+</html>

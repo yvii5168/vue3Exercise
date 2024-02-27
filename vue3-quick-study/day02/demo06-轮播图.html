@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <!-- 轮播图演示 -->
+    <!-- 按钮区域 -->
+    <button @click="prev">上一张</button>&nbsp;&nbsp;
+    <button @click="next">下一张</button>
+    <hr>
+    <!-- 点击图片编号跳转 -->
+    <ul>
+      <li v-for="value in 4">
+        <a href="#" @click="jump(value)">{{ value }}</a>
+      </li>
+    </ul>
+    <hr>
+    <!-- 图片区域 -->
+    <h3>图片number: {{number}}.jpg</h3>
+    <img :src=`./images/${number}.jpg` :alt=`${number}.jpg` :style="styleObj" >
+  </div>
+  <script type="module">
+    import {createApp, ref, reactive} from './js/vue.esm-browser.js';
+
+    createApp({
+      setup() {
+        const number = ref(1);
+        const styleObj = reactive({
+          width: '300px',
+          height: '200px'
+        });
+
+        // 定义样式改变方法
+        const styleChange = (num)=>{
+          console.log('typeof num：', typeof num);
+          // 手动改变图片高度
+          if ([1, 4].includes(num)) {
+            styleObj.height = '200px';
+          }else{
+            styleObj.height = '500px';
+          }
+        }
+
+        const prev = ()=>{
+          number.value--;
+          if(number.value == 0) {
+            number.value = 4
+          }
+          styleChange(number.value);
+        }
+        const next = ()=>{
+          number.value++;
+          if (number.value == 5) {
+            number.value = 1;
+          }
+          styleChange(number.value);
+        }
+
+        const jump = (value)=>{
+          number.value = value;
+          styleChange(value);
+        }
+
+        return {
+          number,
+          prev,
+          next,
+          jump,
+          styleObj
+        }
+      }
+    }).mount("#app");
+  </script>
+</body>
+</html>
